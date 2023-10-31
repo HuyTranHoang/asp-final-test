@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-
-namespace asp_final_test.ViewModels;
+﻿namespace asp_final_test.ViewModels;
 
 public class VaccinationScheduleDto
 {

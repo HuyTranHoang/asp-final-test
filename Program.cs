@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

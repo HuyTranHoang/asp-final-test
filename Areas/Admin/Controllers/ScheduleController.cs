@@ -1,6 +1,7 @@
 using asp_final_test.Models;
 using asp_final_test.Repository.IRepository;
 using asp_final_test.ViewModels;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -10,10 +11,12 @@ namespace asp_final_test.Areas.Admin.Controllers;
 public class ScheduleController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public ScheduleController(IUnitOfWork unitOfWork)
+    public ScheduleController(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     [TempData] public string? SuccessMessage { get; set; }
@@ -94,32 +97,37 @@ public class ScheduleController : Controller
     [HttpGet]
     public IActionResult GetAll()
     {
+        // var scheduleList = _unitOfWork.VaccinationSchedule.GetAll(includeProperties: "Vaccine,VaccinationDates");
+        // var scheduleDtos = new List<VaccinationScheduleDto>();
+        //
+        // foreach (var schedule in scheduleList)
+        // {
+        //     var scheduleDto = new VaccinationScheduleDto()
+        //     {
+        //         Id = schedule.Id,
+        //         Name = schedule.Name,
+        //         VaccineName = schedule.Vaccine.Name,
+        //         VaccinationDates = new List<VaccinationDateDto>()
+        //     };
+        //
+        //     foreach (var date in schedule.VaccinationDates)
+        //     {
+        //         scheduleDto.VaccinationDates.Add(new VaccinationDateDto()
+        //         {
+        //             Id = date.Id,
+        //             Date = date.Date
+        //         });
+        //     }
+        //
+        //     scheduleDtos.Add(scheduleDto);
+        // }
+        //
+        // return Json(new { data = scheduleDtos });
+
         var scheduleList = _unitOfWork.VaccinationSchedule.GetAll(includeProperties: "Vaccine,VaccinationDates");
-        var scheduleDtos = new List<VaccinationScheduleDto>();
-
-        foreach (var schedule in scheduleList)
-        {
-            var scheduleDto = new VaccinationScheduleDto()
-            {
-                Id = schedule.Id,
-                Name = schedule.Name,
-                VaccineName = schedule.Vaccine.Name,
-                VaccinationDates = new List<VaccinationDateDto>()
-            };
-
-            foreach (var date in schedule.VaccinationDates)
-            {
-                scheduleDto.VaccinationDates.Add(new VaccinationDateDto()
-                {
-                    Id = date.Id,
-                    Date = date.Date
-                });
-            }
-
-            scheduleDtos.Add(scheduleDto);
-        }
-
+        var scheduleDtos = _mapper.Map<List<VaccinationScheduleDto>>(scheduleList);
         return Json(new { data = scheduleDtos });
+
     }
 
 
