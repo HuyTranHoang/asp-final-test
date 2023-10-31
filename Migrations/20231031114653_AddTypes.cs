@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace asp_final_test.Migrations
 {
-    public partial class AddCategoryAndSeedData : Migration
+    public partial class AddTypes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Types",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,25 +20,25 @@ namespace asp_final_test.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Types", x => x.Id);
                 });
 
             migrationBuilder.InsertData(
-                table: "Categories",
+                table: "Types",
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 10, 31, 2, 40, 50, 0, DateTimeKind.Unspecified), "Inactivated vaccines" },
-                    { 2, new DateTime(2023, 10, 31, 3, 44, 12, 0, DateTimeKind.Unspecified), "Live-attenuated vaccines" },
-                    { 3, new DateTime(2023, 10, 31, 4, 55, 23, 0, DateTimeKind.Unspecified), "Messenger RNA (mRNA) vaccines" },
-                    { 4, new DateTime(2023, 10, 31, 5, 22, 34, 0, DateTimeKind.Unspecified), "Vaccine virus trung gian" }
+                    { 1, new DateTime(2023, 10, 31, 2, 40, 50, 0, DateTimeKind.Unspecified), "Inactivated" },
+                    { 2, new DateTime(2023, 10, 31, 3, 44, 12, 0, DateTimeKind.Unspecified), "Live-attenuated" },
+                    { 3, new DateTime(2023, 10, 31, 4, 55, 23, 0, DateTimeKind.Unspecified), "Messenger RNA (mRNA)" },
+                    { 4, new DateTime(2023, 10, 31, 5, 22, 34, 0, DateTimeKind.Unspecified), "Subunit, recombinant, polysaccharide, and conjugate" }
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Types");
         }
     }
 }

@@ -1,0 +1,72 @@
+@model VaccinationSchedule
+
+@{
+    ViewData["Title"] = Model.Id != 0 ? "Update" : "Create" + " Schedule";
+    var errorMessage = ViewBag.ErrorMessage;
+}
+
+<section class="bg-body-tertiary mt-4 pb-3 rounded-bottom shadow-lg">
+    <h1 class="bg-body-secondary bg-gradient px-3 py-4 rounded-top text-center">
+        @ViewBag.Title
+    </h1>
+
+    <div class="d-flex justify-content-end px-4 py-2">
+        <a asp-action="Index" class="btn btn-primary text-decoration-none text-white">
+            <i class="fa-arrow-left-to-line fa-regular"></i> Back to schedule list
+        </a>
+    </div>
+
+    <div class="p-4">
+        @if (errorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @errorMessage
+            </div>
+        }
+        <form asp-action="Upsert">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="VaccineId" class="form-label"></label>
+                <select asp-for="VaccineId" class="form-control" asp-items="ViewBag.VaccineListItem">
+                    <option value="">-- Select vaccine --</option>
+                </select>
+                <span asp-validation-for="VaccineId" class="text-danger"></span>
+            </div>
+
+            <div id="dates-container">
+                <div class="form-group mb-2">
+                    <label for="vaccinationDates" class="form-label">Vaccination Dates:</label>
+                    <input type="date" name="vaccinationDates" class="form-control w-50" />
+                </div>
+            </div>
+
+            <div class="d-flex form-group justify-content-between mt-3">
+                <button type="button" id="add-date-btn" class="btn btn-secondary text-white">Add Date</button>
+                <input class="btn btn-primary text-white" style="width: 10rem" type="submit" value="@(Model.Id != 0 ? "Update" : "Create")" />
+            </div>
+        </form>
+    </div>
+</section>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById('add-date-btn').addEventListener('click', function () {
+            var container = document.getElementById('dates-container');
+            var input = document.createElement('input');
+            input.type = 'date';
+            input.name = 'vaccinationDates';
+            input.className = 'form-control mb-2 w-50';
+            container.appendChild(input);
+        });
+    </script>
+}

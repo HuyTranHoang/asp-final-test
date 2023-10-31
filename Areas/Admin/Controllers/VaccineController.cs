@@ -1,6 +1,5 @@
 using asp_final_test.Models;
 using asp_final_test.Repository.IRepository;
-using asp_final_test.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -27,41 +26,41 @@ public class VaccineController : Controller
 
     public IActionResult Upsert(int? id)
     {
-        var vaccineDto = new VaccineDto();
+        Vaccine vaccine;
 
         if (id is null or 0)
         {
-            vaccineDto.Vaccine = new Vaccine();
+            vaccine = new Vaccine();
         }
         else
         {
-            vaccineDto.Vaccine = _unitOfWork.Vaccine.GetById(id);
-            if ( vaccineDto.Vaccine == null) return NotFound();
+            vaccine = _unitOfWork.Vaccine.GetById(id);
+            if (vaccine == null) return NotFound();
         }
 
-        vaccineDto.CategoryListItem = new SelectList(_unitOfWork.Category.GetAll(), "Id", "Name",  vaccineDto.Vaccine.CategoryId);
-        return View(vaccineDto);
+        ViewBag.TypeListItem = new SelectList(_unitOfWork.Type.GetAll(), "Id", "Name",  vaccine.TypeId);
+        return View(vaccine);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Upsert(int id, [Bind("Vaccine")] VaccineDto vaccineDto)
+    public IActionResult Upsert(int id, [Bind("Id, Name, ManufacturingCountry, ExpirationDate, Price, TypeId")] Vaccine vaccine)
     {
-        if (id != vaccineDto.Vaccine.Id) return NotFound();
+        if (id != vaccine.Id) return NotFound();
 
-        Validation(vaccineDto.Vaccine);
-        vaccineDto.CategoryListItem = new SelectList(_unitOfWork.Category.GetAll(), "Id", "Name", vaccineDto.Vaccine.CategoryId);
+        Validation(vaccine);
+        ViewBag.TypeListItem = new SelectList(_unitOfWork.Type.GetAll(), "Id", "Name", vaccine.TypeId);
 
-        if (!ModelState.IsValid) return View("upsert", vaccineDto);
+        if (!ModelState.IsValid) return View("upsert", vaccine);
 
         if (id == 0)
         {
-            _unitOfWork.Vaccine.Insert(vaccineDto.Vaccine);
+            _unitOfWork.Vaccine.Insert(vaccine);
             SuccessMessage = "New Vaccine added";
         }
         else
         {
-            _unitOfWork.Vaccine.Update(vaccineDto.Vaccine);
+            _unitOfWork.Vaccine.Update(vaccine);
             SuccessMessage = "Vaccine updated";
         }
 
@@ -89,7 +88,7 @@ public class VaccineController : Controller
     [HttpGet]
     public IActionResult GetAll()
     {
-        var vaccineList = _unitOfWork.Vaccine.GetAll(includeProperties: "Category");
+        var vaccineList = _unitOfWork.Vaccine.GetAll("Type");
         return Json(new { data = vaccineList });
     }
 

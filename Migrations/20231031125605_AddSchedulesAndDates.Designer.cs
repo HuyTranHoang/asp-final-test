@@ -12,8 +12,8 @@ using asp_final_test.Data;
 namespace asp_final_test.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231031075736_AddVaccies")]
-    partial class AddVaccies
+    [Migration("20231031125605_AddSchedulesAndDates")]
+    partial class AddSchedulesAndDates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace asp_final_test.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("asp_final_test.Models.Category", b =>
+            modelBuilder.Entity("asp_final_test.Models.Type", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace asp_final_test.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Types");
 
                     b.HasData(
                         new
@@ -70,7 +70,7 @@ namespace asp_final_test.Migrations
                         });
                 });
 
-            modelBuilder.Entity("asp_final_test.Models.Vaccine", b =>
+            modelBuilder.Entity("asp_final_test.Models.VaccinationDate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,8 +78,54 @@ namespace asp_final_test.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VaccinationScheduleId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VaccinationScheduleId");
+
+                    b.ToTable("VaccinationDates");
+                });
+
+            modelBuilder.Entity("asp_final_test.Models.VaccinationSchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VaccineId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VaccineId");
+
+                    b.ToTable("VaccinationSchedules");
+                });
+
+            modelBuilder.Entity("asp_final_test.Models.Vaccine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -98,22 +144,52 @@ namespace asp_final_test.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Vaccines");
                 });
 
-            modelBuilder.Entity("asp_final_test.Models.Vaccine", b =>
+            modelBuilder.Entity("asp_final_test.Models.VaccinationDate", b =>
                 {
-                    b.HasOne("asp_final_test.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("asp_final_test.Models.VaccinationSchedule", "VaccinationSchedule")
+                        .WithMany("VaccinationDates")
+                        .HasForeignKey("VaccinationScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("VaccinationSchedule");
+                });
+
+            modelBuilder.Entity("asp_final_test.Models.VaccinationSchedule", b =>
+                {
+                    b.HasOne("asp_final_test.Models.Vaccine", "Vaccine")
+                        .WithMany()
+                        .HasForeignKey("VaccineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vaccine");
+                });
+
+            modelBuilder.Entity("asp_final_test.Models.Vaccine", b =>
+                {
+                    b.HasOne("asp_final_test.Models.Type", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("asp_final_test.Models.VaccinationSchedule", b =>
+                {
+                    b.Navigation("VaccinationDates");
                 });
 #pragma warning restore 612, 618
         }

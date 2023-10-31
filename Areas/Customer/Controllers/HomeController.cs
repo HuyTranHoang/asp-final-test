@@ -19,7 +19,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        var vaccines = _unitOfWork.Vaccine.GetAll("Category");
+        var vaccines = _unitOfWork.Vaccine.GetAll("Type");
         return View(vaccines);
     }
 
@@ -27,7 +27,7 @@ public class HomeController : Controller
     {
         var basketItem = new BasketItem
         {
-            Vaccine = _unitOfWork.Vaccine.Get(p => p.Id == id, "Category").FirstOrDefault(),
+            Vaccine = _unitOfWork.Vaccine.Get(p => p.Id == id, "Type").FirstOrDefault(),
             Count = 1
         };
 

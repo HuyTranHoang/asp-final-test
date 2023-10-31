@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Mvc.DataAccess.Repository.IRepository;
+namespace asp_final_test.Repository.IRepository;
 
 public interface IGenericRepository<T> where T : class
 {

@@ -12,8 +12,8 @@ using asp_final_test.Data;
 namespace asp_final_test.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231031075014_AddCategoryAndSeedData")]
-    partial class AddCategoryAndSeedData
+    [Migration("20231031114653_AddTypes")]
+    partial class AddTypes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace asp_final_test.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("asp_final_test.Models.Category", b =>
+            modelBuilder.Entity("asp_final_test.Models.Type", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,32 +41,32 @@ namespace asp_final_test.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Types");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2023, 10, 31, 2, 40, 50, 0, DateTimeKind.Unspecified),
-                            Name = "Inactivated vaccines"
+                            Name = "Inactivated"
                         },
                         new
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2023, 10, 31, 3, 44, 12, 0, DateTimeKind.Unspecified),
-                            Name = "Live-attenuated vaccines"
+                            Name = "Live-attenuated"
                         },
                         new
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2023, 10, 31, 4, 55, 23, 0, DateTimeKind.Unspecified),
-                            Name = "Messenger RNA (mRNA) vaccines"
+                            Name = "Messenger RNA (mRNA)"
                         },
                         new
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2023, 10, 31, 5, 22, 34, 0, DateTimeKind.Unspecified),
-                            Name = "Vaccine virus trung gian"
+                            Name = "Subunit, recombinant, polysaccharide, and conjugate"
                         });
                 });
 #pragma warning restore 612, 618

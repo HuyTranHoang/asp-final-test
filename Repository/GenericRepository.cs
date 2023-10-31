@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using asp_final_test.Data;
+using asp_final_test.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
-using Mvc.DataAccess.Repository.IRepository;
 
 namespace asp_final_test.Repository;
 

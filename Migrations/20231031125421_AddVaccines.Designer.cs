@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asp_final_test.Data;
 
@@ -11,9 +12,10 @@ using asp_final_test.Data;
 namespace asp_final_test.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231031125421_AddVaccines")]
+    partial class AddVaccines
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,55 +70,6 @@ namespace asp_final_test.Migrations
                         });
                 });
 
-            modelBuilder.Entity("asp_final_test.Models.VaccinationDate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("VaccinationScheduleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VaccinationScheduleId");
-
-                    b.ToTable("VaccinationDates");
-                });
-
-            modelBuilder.Entity("asp_final_test.Models.VaccinationSchedule", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VaccineId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VaccineId");
-
-                    b.ToTable("VaccinationSchedules");
-                });
-
             modelBuilder.Entity("asp_final_test.Models.Vaccine", b =>
                 {
                     b.Property<int>("Id")
@@ -152,28 +105,6 @@ namespace asp_final_test.Migrations
                     b.ToTable("Vaccines");
                 });
 
-            modelBuilder.Entity("asp_final_test.Models.VaccinationDate", b =>
-                {
-                    b.HasOne("asp_final_test.Models.VaccinationSchedule", "VaccinationSchedule")
-                        .WithMany("VaccinationDates")
-                        .HasForeignKey("VaccinationScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("VaccinationSchedule");
-                });
-
-            modelBuilder.Entity("asp_final_test.Models.VaccinationSchedule", b =>
-                {
-                    b.HasOne("asp_final_test.Models.Vaccine", "Vaccine")
-                        .WithMany()
-                        .HasForeignKey("VaccineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Vaccine");
-                });
-
             modelBuilder.Entity("asp_final_test.Models.Vaccine", b =>
                 {
                     b.HasOne("asp_final_test.Models.Type", "Type")
@@ -183,11 +114,6 @@ namespace asp_final_test.Migrations
                         .IsRequired();
 
                     b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("asp_final_test.Models.VaccinationSchedule", b =>
-                {
-                    b.Navigation("VaccinationDates");
                 });
 #pragma warning restore 612, 618
         }

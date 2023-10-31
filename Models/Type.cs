@@ -1,9 +1,10 @@
-﻿using Microsoft.Build.Framework;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace asp_final_test.Models;
 
-public class Category
+public class Type
 {
+    [Key]
     public int Id { get; set; }
 
     [Required]

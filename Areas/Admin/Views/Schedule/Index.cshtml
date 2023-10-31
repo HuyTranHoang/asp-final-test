@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Category>
+﻿@model IEnumerable<VaccinationSchedule>
 
 @{
     ViewData["Title"] = "Category";
@@ -7,7 +7,7 @@
 }
 
 <section class="bg-body-tertiary mt-4 pb-3 rounded-bottom shadow-lg">
-    <h1 class="bg-body-secondary bg-gradient px-3 py-4 rounded-top text-center">Category List</h1>
+    <h1 class="bg-body-secondary bg-gradient px-3 py-4 rounded-top text-center">Vaccination Schedule List</h1>
     <div class="d-flex justify-content-between px-4 py-2">
         <div class="align-items-center d-flex position-relative">
             <input class="form-control" id="search" name="search" placeholder="Search..." style="padding-right: 35px" type="text">
@@ -16,7 +16,7 @@
             </button>
         </div>
         <a asp-action="Upsert" class="btn btn-primary text-decoration-none text-white">
-            <i class="fa-plus fa-regular"></i> Create new category
+            <i class="fa-plus fa-regular"></i> Create new schedule
         </a>
     </div>
 
@@ -26,10 +26,13 @@
             <tr class="table-primary">
                 <th scope="col">#</th>
                 <th scope="col">
-                    Name
+                    Schedule Name
                 </th>
                 <th scope="col">
-                    Created At
+                    Vaccine Name
+                </th>
+                <th scope="col">
+                    Dates
                 </th>
                 <th scope="col" style="width: 20%">
                     Actions
@@ -59,27 +62,32 @@
           function loadDataTable(table) {
             return table.DataTable({
                   columnDefs: [
-                      {orderable: false, targets: 3}
+                      {orderable: false, targets: [3,4]}
                   ],
-                  ajax: {url: "/admin/category/getall"},
+                  ajax: {url: "/admin/schedule/getall"},
                   columns: [
                       {
                           "render": function (data, type, full, meta) {
                               return meta.row + 1;
                           }
                       },
-                      {data: "name",},
+                      {data: "name"},
+                      {data: "vaccineName"},
                       {
-                          data: "createdAt",
+                          data: "vaccinationDates",
                           "render": function (data) {
-                              return moment(data).format('DD/MM/YYYY HH:mm:ss');
+                              let dateString = ""
+                              data.forEach((date) => {
+                                  dateString = dateString + `<p>${moment(date.date).format('DD/MM/YYYY')}</p>`
+                              })
+                              return dateString
                           }
                       },
                       {
                           data: "id",
                           "render": function (data) {
                               return `<div class="d-flex">
-                                    <a href="/admin/category/upsert?id=${data}" class="btn btn-secondary fw-semibold me-3 px-4 text-white">
+                                    <a href="/admin/schedule/upsert?id=${data}" class="btn btn-secondary fw-semibold me-3 px-4 text-white">
                                         <i class="fa-pen-to-square fa-regular"></i> Edit
                                     </a>
 
@@ -96,7 +104,7 @@
           function handleDeleteButton(table, dataTable) {
               table.on( "click", ".delete-button", async function() {
                   const itemId = $(this).data('id')
-                  const url = `/Admin/Category/Delete/${itemId}`
+                  const url = `/Admin/Schedule/Delete/${itemId}`
 
                   const result = await Swal.fire({
                     title: 'Are you sure?',

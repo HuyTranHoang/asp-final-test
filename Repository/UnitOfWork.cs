@@ -1,29 +1,33 @@
 ﻿using asp_final_test.Data;
 using asp_final_test.Models;
 using asp_final_test.Repository.IRepository;
+using Type = asp_final_test.Models.Type;
+
 namespace asp_final_test.Repository;
 
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _dbContext;
-    private GenericRepository<Category>? _category;
-    private GenericRepository<Vaccine>? _product;
+    private GenericRepository<Type>? _type;
+    private GenericRepository<Vaccine>? _vaccine;
+    private GenericRepository<VaccinationSchedule>? _vaccinationSchedule;
+    private GenericRepository<VaccinationDate>? _vaccinationDate;
 
     public UnitOfWork(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public GenericRepository<Category> Category
+    public GenericRepository<Type> Type
     {
         get
         {
-            if (_category == null)
+            if (_type == null)
             {
-                _category = new GenericRepository<Category>(_dbContext);
+                _type = new GenericRepository<Type>(_dbContext);
             }
 
-            return _category;
+            return _type;
         }
     }
 
@@ -31,12 +35,38 @@ public class UnitOfWork : IUnitOfWork
     {
         get
         {
-            if (_product == null)
+            if (_vaccine == null)
             {
-                _product = new GenericRepository<Vaccine>(_dbContext);
+                _vaccine = new GenericRepository<Vaccine>(_dbContext);
             }
 
-            return _product;
+            return _vaccine;
+        }
+    }
+
+    public GenericRepository<VaccinationSchedule> VaccinationSchedule
+    {
+        get
+        {
+            if (_vaccinationSchedule == null)
+            {
+                _vaccinationSchedule = new GenericRepository<VaccinationSchedule>(_dbContext);
+            }
+
+            return _vaccinationSchedule;
+        }
+    }
+
+    public GenericRepository<VaccinationDate> VaccinationDate
+    {
+        get
+        {
+            if (_vaccinationDate == null)
+            {
+                _vaccinationDate = new GenericRepository<VaccinationDate>(_dbContext);
+            }
+
+            return _vaccinationDate;
         }
     }
 
