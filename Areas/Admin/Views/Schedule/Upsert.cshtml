@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Model.Id != 0 ? "Update" : "Create" + " Schedule";
     var errorMessage = ViewBag.ErrorMessage;
+    List<DateTime> vaccinationDates = ViewBag.VaccinationDates;
 }
 
 <section class="bg-body-tertiary mt-4 pb-3 rounded-bottom shadow-lg">
@@ -43,7 +44,28 @@
             <div id="dates-container">
                 <div class="form-group mb-2">
                     <label for="vaccinationDates" class="form-label">Vaccination Dates:</label>
-                    <input type="date" name="vaccinationDates" class="form-control w-50" />
+                    @if (Model.Id == 0)
+                    {
+                        @if (vaccinationDates == null || vaccinationDates.Count == 0)
+                        {
+                            <input type="date" name="vaccinationDates" class="form-control w-50" />
+                        }
+                        else
+                        {
+                            foreach (var date in vaccinationDates)
+                            {
+                                <input type="date" name="vaccinationDates" value="@date.ToString("yyyy-MM-dd")" class="form-control w-50 mb-2" />
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in Model.VaccinationDates)
+                        {
+                            <input type="date" name="vaccinationDates" value="@item.Date.ToString("yyyy-MM-dd")" class="form-control w-50 mb-2" />
+                        }
+                    }
+
                 </div>
             </div>
 

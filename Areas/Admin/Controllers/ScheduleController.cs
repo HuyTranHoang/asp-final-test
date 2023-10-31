@@ -37,7 +37,7 @@ public class ScheduleController : Controller
         }
         else
         {
-            schedule = _unitOfWork.VaccinationSchedule.GetById(id);
+            schedule = _unitOfWork.VaccinationSchedule.Get(s => s.Id == id, includeProperties: "VaccinationDates").FirstOrDefault();
             if (schedule == null) return NotFound();
         }
 
@@ -47,16 +47,21 @@ public class ScheduleController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Upsert(int id, [Bind("Id, Name, VaccineId")] VaccinationSchedule schedule, [Bind("vaccinationDates")]List<DateTime> vaccinationDates)
+    public IActionResult Upsert(int id, [Bind("Id, Name, VaccineId")] VaccinationSchedule schedule,
+        [Bind("vaccinationDates")] List<DateTime> vaccinationDates)
     {
         if (id != schedule.Id) return NotFound();
 
         ViewBag.VaccineListItem = new SelectList(_unitOfWork.Vaccine.GetAll(), "Id", "Name", schedule.VaccineId);
+        ViewBag.VaccinationDates = vaccinationDates;
 
         if (vaccinationDates == null || vaccinationDates.Count == 0)
         {
             ViewBag.ErrorMessage = "Schedule needs at least 1 date";
+            return View("upsert", schedule);
         }
+
+        ModelState.Remove("vaccinationDates");
 
         if (!ModelState.IsValid)
         {
