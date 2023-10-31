@@ -1,0 +1,77 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
+    var qsPath = ViewContext.HttpContext.Request.QueryString.Value;
+    var returnUrl = $"{routeUrl}{qsPath}";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>@ViewData["Title"] - Web</title>
+    <link asp-append-version="true" href="~/css/sweetalert2.min.css" rel="stylesheet" />
+    <link href="https://site-assets.fontawesome.com/releases/v6.3.0/css/all.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.css" rel="stylesheet">
+    <link asp-append-version="true" href="~/css/style.css" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column min-vh-100" data-bs-theme="dark">
+<header>
+    <nav class="mb-3 navbar navbar-expand-sm navbar-gradient-bg navbar-toggleable-sm" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a asp-action="Index" asp-area="" asp-controller="Home" class="navbar-brand">
+                <i class="fa-fish fa-light"></i> Vac<b>cine</b>
+            </a>
+            <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target=".navbar-collapse"
+                data-bs-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse d-sm-inline-flex justify-content-between navbar-collapse">
+                <ul class="me-auto navbar-nav">
+                    <li class="nav-item">
+                        <a asp-action="Index" asp-area="" asp-controller="Home" class="nav-link @(returnUrl == "/" ? "active" : "")">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Privacy" asp-area="" asp-controller="Home" class="nav-link @(returnUrl.Contains("/Privacy") ? "active" : "")">Privacy</a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a aria-expanded="false" class="nav-link dropdown-toggle @(returnUrl.Contains("/Admin") ? "active" : "")" data-bs-toggle="dropdown" href="#" role="button">
+                            Content Management
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a asp-action="Index" asp-area="Admin" asp-controller="Category" class="dropdown-item">Category</a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-area="Admin" asp-controller="Vaccine" class="dropdown-item">Vaccine</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container flex-grow-1">
+    <main class="pb-3" role="main">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2023 - Web - <a asp-action="Privacy" asp-area="" asp-controller="Home">Privacy</a>
+    </div>
+</footer>
+<script src="~/js/jquery-3.7.1.min.js"></script>
+<script asp-append-version="true" src="~/js/bootstrap.bundle.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.js"></script>
+<script asp-append-version="true" src="~/js/sweetalert2.all.min.js"></script>
+<script asp-append-version="true" src="~/js/site.js"></script>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>
