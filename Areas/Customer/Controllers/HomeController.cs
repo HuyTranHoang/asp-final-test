@@ -19,21 +19,18 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        var vaccines = _unitOfWork.Vaccine.GetAll("Type");
-        return View(vaccines);
+        var schedules = _unitOfWork.VaccinationSchedule.GetAll("Vaccine");
+        return View(schedules);
     }
 
     public IActionResult Details(int id)
     {
-        var basketItem = new BasketItem
+        var schedules = _unitOfWork.VaccinationSchedule.Get(i => i.Id == id, "Vaccine.Type").FirstOrDefault();
+        if (schedules is null)
         {
-            Vaccine = _unitOfWork.Vaccine.Get(p => p.Id == id, "Type").FirstOrDefault(),
-            Count = 1
-        };
-
-        if (basketItem.Vaccine == null) return NotFound();
-
-        return View(basketItem);
+            return NotFound();
+        }
+        return View(schedules);
     }
 
     public IActionResult Privacy()

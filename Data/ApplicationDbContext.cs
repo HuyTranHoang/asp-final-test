@@ -16,8 +16,6 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<VaccinationSchedule> VaccinationSchedules { get; set; }
 
-    public DbSet<VaccinationDate> VaccinationDates { get; set; }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

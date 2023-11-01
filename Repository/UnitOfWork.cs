@@ -11,7 +11,6 @@ public class UnitOfWork : IUnitOfWork
     private GenericRepository<Type>? _type;
     private GenericRepository<Vaccine>? _vaccine;
     private GenericRepository<VaccinationSchedule>? _vaccinationSchedule;
-    private GenericRepository<VaccinationDate>? _vaccinationDate;
 
     public UnitOfWork(ApplicationDbContext dbContext)
     {
@@ -54,19 +53,6 @@ public class UnitOfWork : IUnitOfWork
             }
 
             return _vaccinationSchedule;
-        }
-    }
-
-    public GenericRepository<VaccinationDate> VaccinationDate
-    {
-        get
-        {
-            if (_vaccinationDate == null)
-            {
-                _vaccinationDate = new GenericRepository<VaccinationDate>(_dbContext);
-            }
-
-            return _vaccinationDate;
         }
     }
 

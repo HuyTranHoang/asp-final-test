@@ -1,80 +1,66 @@
-@model BasketItem
+@model VaccinationSchedule
 
 @{
     ViewData["Title"] = "Details";
     var priceFormat = $"{Model.Vaccine.Price,0:C0}";
+
+    var inputString = Model.VaccinationDates;
+    char[] delimiterChars = { ';' };
+    var stringArray = inputString.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+    var datesResult = string.Join(", ", stringArray);
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<form asp-controller="Basket" asp-action="AddToCart">
+<form asp-action="AddToCart" asp-controller="Basket">
     <input asp-for="Vaccine.Id" type="hidden">
     <a asp-action="Index" class="btn btn-outline-primary my-3">Back to home</a>
     <div class="row">
         <div class="col">
-            <h2 class="text-gradient">@Model.Vaccine.Name</h2>
-            <h5 class="mb-3">by @Model.Vaccine.ManufacturingCountry</h5>
-            <span class="category-label">@Model.Vaccine.Type!.Name</span>
-
-
-            <div class="my-3 row">
-                <div class="col-3 fs-3 pe-0 text-success">
-                    Price
+            <h2 class="text-gradient">@Model.Name</h2>
+            <span class="category-label">Type: @Model.Vaccine.Type!.Name</span>
+            <div class="border col-8 fs-5 mt-3">
+                <div class="row">
+                    <div class="border-end col-sm-4 pe-0">
+                        <p class="border-bottom fw-semibold m-0 ps-2 py-2">Vaccination Name</p>
+                    </div>
+                    <div class="col-sm-8 ps-0">
+                        <p class="border-bottom m-0 ps-2 py-2">@Model.Vaccine.Name</p>
+                    </div>
                 </div>
-                <div class="col-3 fs-3 p-0 text-success">
-                    @priceFormat
+                <div class="row">
+                    <div class="border-end col-sm-4 pe-0">
+                        <p class="border-bottom fw-semibold m-0 ps-2 py-2">Manufacturing Country</p>
+                    </div>
+                    <div class="col-sm-8 ps-0">
+                        <p class="border-bottom m-0 ps-2 py-2">@Model.Vaccine.ManufacturingCountry</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="border-end col-sm-4 pe-0">
+                        <p class="border-bottom fw-semibold m-0 ps-2 py-2">Vaccination Dates</p>
+                    </div>
+                    <div class="col-sm-8 ps-0">
+                        <p class="border-bottom m-0 ps-2 py-2">@datesResult</p>
+                    </div>
+                </div>
+                <div class="row text-success">
+                    <div class="border-end col-sm-4 pe-0">
+                        <p class="fw-semibold m-0 ps-2 py-2">Price *</p>
+                    </div>
+                    <div class="col-sm-8 ps-0">
+                        <p class="m-0 ps-2 py-2">@priceFormat</p>
+                    </div>
                 </div>
             </div>
-
-
-            <div class="align-items-center d-flex">
-                <label asp-for="Count" class="fs-5 pe-5"></label>
-                <div class="input-group" style="width: 130px;">
-                    <a class="input-group-text text-decoration-none" onclick="countMinus()" style="cursor: pointer">
-                        <i class="fa-light fa-minus"></i>
-                    </a>
-                    <input asp-for="Count" class="form-control fw-semibold" onblur="validateInput()">
-                    <a class="input-group-text text-decoration-none" onclick="countPlus()" style="cursor: pointer">
-                        <i class="fa-light fa-plus"></i>
-                    </a>
-                </div>
-            </div>
-
+            <p class="mt-3 fst-italic">* Price for one vaccine</p>
             <p class="mt-3">Expiration Date: @Model.Vaccine.ExpirationDate</p>
 
             <button class="button-gradient fw-semibold py-2 text-uppercase" type="submit">
                 <i class="fa-cart-plus fa-solid me-2"></i>
-                Add to cart
+                Pick this schedule
             </button>
 
         </div>
     </div>
 </form>
-
-@section Scripts {
-    <script>
-    const count = $("#Count");
-
-    function countPlus() {
-        const curCount = count.val()
-        count.val(+curCount + 1)
-    }
-
-    function countMinus() {
-        const curCount = count.val()
-        if (curCount > 1) {
-            count.val(+curCount - 1)
-        }
-    }
-
-    function validateInput() {
-        const curCount = count.val()
-
-        if (curCount < 0)
-            count.val(1)
-
-        if (curCount > 999)
-            count.val(999)
-    }
-    </script>
-}

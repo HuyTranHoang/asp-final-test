@@ -19,9 +19,7 @@ public class VaccineController : Controller
 
     public IActionResult Index()
     {
-        var vaccines = _unitOfWork.Vaccine.GetAll();
-
-        return View(vaccines);
+        return View();
     }
 
     public IActionResult Upsert(int? id)

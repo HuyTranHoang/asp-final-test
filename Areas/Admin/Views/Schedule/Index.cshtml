@@ -78,7 +78,7 @@
                           "render": function (data) {
                               let dateString = ""
                               data.forEach((date) => {
-                                  dateString = dateString + `<p>${moment(date.date).format('DD/MM/YYYY')}</p>`
+                                  dateString = dateString + ` <p>${date}</p>`
                               })
                               return dateString
                           }

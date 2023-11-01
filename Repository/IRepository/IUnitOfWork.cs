@@ -8,6 +8,5 @@ public interface IUnitOfWork : IDisposable
     GenericRepository<Type> Type { get; }
     GenericRepository<Vaccine> Vaccine { get; }
     GenericRepository<VaccinationSchedule> VaccinationSchedule { get; }
-    GenericRepository<VaccinationDate> VaccinationDate { get; }
     int Save();
 }

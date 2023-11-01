@@ -18,9 +18,7 @@ public class TypeController : Controller
 
     public IActionResult Index()
     {
-        var types = _unitOfWork.Type.GetAll();
-
-        return View(types);
+        return View();
     }
 
     public IActionResult Upsert(int? id)

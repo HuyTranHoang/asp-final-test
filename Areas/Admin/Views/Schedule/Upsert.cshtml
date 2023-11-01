@@ -41,36 +41,13 @@
                 <span asp-validation-for="VaccineId" class="text-danger"></span>
             </div>
 
-            <div id="dates-container">
-                <div class="form-group mb-2">
-                    <label for="vaccinationDates" class="form-label">Vaccination Dates:</label>
-                    @if (Model.Id == 0)
-                    {
-                        @if (vaccinationDates == null || vaccinationDates.Count == 0)
-                        {
-                            <input type="date" name="vaccinationDates" class="form-control w-50" />
-                        }
-                        else
-                        {
-                            foreach (var date in vaccinationDates)
-                            {
-                                <input type="date" name="vaccinationDates" value="@date.ToString("yyyy-MM-dd")" class="form-control w-50 mb-2" />
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var item in Model.VaccinationDates)
-                        {
-                            <input type="date" name="vaccinationDates" value="@item.Date.ToString("yyyy-MM-dd")" class="form-control w-50 mb-2" />
-                        }
-                    }
-
-                </div>
+            <div class="form-group mb-3">
+                <label asp-for="VaccinationDates" class="form-label"></label>
+                <input asp-for="VaccinationDates" class="form-control" />
+                <span asp-validation-for="VaccinationDates" class="text-danger"></span>
             </div>
 
-            <div class="d-flex form-group justify-content-between mt-3">
-                <button type="button" id="add-date-btn" class="btn btn-secondary text-white">Add Date</button>
+            <div class="d-flex form-group justify-content-center mt-3">
                 <input class="btn btn-primary text-white" style="width: 10rem" type="submit" value="@(Model.Id != 0 ? "Update" : "Create")" />
             </div>
         </form>
@@ -80,15 +57,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
-    <script>
-        document.getElementById('add-date-btn').addEventListener('click', function () {
-            var container = document.getElementById('dates-container');
-            var input = document.createElement('input');
-            input.type = 'date';
-            input.name = 'vaccinationDates';
-            input.className = 'form-control mb-2 w-50';
-            container.appendChild(input);
-        });
-    </script>
 }

@@ -11,25 +11,15 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<VaccinationSchedule, VaccinationScheduleDto>()
-            .ForMember(dest => dest.VaccinationDates,
+            .ForMember(dest => dest.vaccinationDates,
                 opt => opt.MapFrom(src => GetVaccinationDatesDto(src)));
     }
 
-    private List<VaccinationDateDto> GetVaccinationDatesDto(VaccinationSchedule vaccinationSchedule)
+    private List<string> GetVaccinationDatesDto(VaccinationSchedule vaccinationSchedule)
     {
-        var vaccinationDateDtos = new List<VaccinationDateDto>();
-
-        foreach (var date in vaccinationSchedule.VaccinationDates)
-        {
-            var vaccinationDateDto = new VaccinationDateDto()
-            {
-                Id = date.Id,
-                Date = date.Date
-            };
-
-            vaccinationDateDtos.Add(vaccinationDateDto);
-        }
-
-        return vaccinationDateDtos;
+        var inputString = vaccinationSchedule.VaccinationDates;
+        char[] delimiterChars = { ';' };
+        var stringArray = inputString.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+        return stringArray.ToList();
     }
 }

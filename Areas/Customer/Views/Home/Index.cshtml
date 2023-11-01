@@ -1,8 +1,10 @@
-﻿@model IEnumerable<Vaccine>
+﻿@model IEnumerable<VaccinationSchedule>
 
 @{
     ViewData["Title"] = "Home Page";
     var successMessage = TempData["SuccessMessage"];
+    char[] delimiterChars = { ';' };
+
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,24 +12,29 @@
 <p>List of all products</p>
 
 <div class="g-4 row row-cols-2 row-cols-md-5">
-    @foreach (var vaccine in Model)
+    @foreach (var schedule in Model)
     {
+        var inputString = schedule.VaccinationDates;
+        var stringArray = inputString.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+        var datesResult = string.Join(", ", stringArray);
+
         <div class="col mb-4">
             <div class="bg-body-tertiary card card-hover h-100 rounded-0 shadow">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-ellipsis" style="min-height: 48px">@vaccine.Name</h5>
+                    <h5 class="card-title text-ellipsis" style="min-height: 48px">@schedule.Name</h5>
                     <p class="mb-1 small text-muted">
-                        <i class="fa-solid fa-tag" style="min-width: 20px"></i> @vaccine.Type.Name
+                        <i class="fa-solid fa-tag" style="min-width: 20px"></i> Vaccine name: @schedule.Vaccine.Name
                     </p>
                     <p class="mb-1 small text-muted">
-                        <i class="fa-solid fa-earth-asia" style="min-width: 20px"></i> @vaccine.ManufacturingCountry
+                        <i class="fa-solid fa-earth-asia" style="min-width: 20px"></i> @schedule.Vaccine.ManufacturingCountry
                     </p>
                     <p class="mb-1 small text-muted">
-                       <i class="fa-solid fa-calendar-days" style="min-width: 20px"></i> @vaccine.ExpirationDate
+                        <i class="fa-solid fa-calendar-days" style="min-width: 20px"></i>
+                        @datesResult
                     </p>
-                    <p class="fw-semibold mb-0 mt-auto text-success">@($"{vaccine.Price,0:C0}")</p>
+                    <p class="fw-semibold mb-0 mt-auto text-success">@($"{schedule.Vaccine.Price,0:C0}")</p>
                 </div>
-                <a asp-action="Details" asp-route-id="@vaccine.Id" class="bg-gradient details-label text-decoration-none">Details</a>
+                <a asp-action="Details" asp-route-id="@schedule.Id" class="bg-gradient details-label text-decoration-none">Details</a>
             </div>
         </div>
     }

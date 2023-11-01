@@ -23,13 +23,12 @@ public class ScheduleController : Controller
 
     public IActionResult Index()
     {
-        var schedules = _unitOfWork.VaccinationSchedule.GetAll(includeProperties: "Vaccine,VaccinationDates");
-        return View(schedules);
+        return View();
     }
 
     public IActionResult Upsert(int? id)
     {
-        VaccinationSchedule schedule;
+        VaccinationSchedule? schedule;
 
         if (id is null or 0)
         {
@@ -37,7 +36,7 @@ public class ScheduleController : Controller
         }
         else
         {
-            schedule = _unitOfWork.VaccinationSchedule.Get(s => s.Id == id, includeProperties: "VaccinationDates").FirstOrDefault();
+            schedule = _unitOfWork.VaccinationSchedule.GetById(id);
             if (schedule == null) return NotFound();
         }
 
@@ -47,19 +46,11 @@ public class ScheduleController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Upsert(int id, [Bind("Id, Name, VaccineId")] VaccinationSchedule schedule,
-        [Bind("vaccinationDates")] List<DateTime> vaccinationDates)
+    public IActionResult Upsert(int id, [Bind("Id, Name, VaccineId, VaccinationDates")] VaccinationSchedule schedule)
     {
         if (id != schedule.Id) return NotFound();
 
         ViewBag.VaccineListItem = new SelectList(_unitOfWork.Vaccine.GetAll(), "Id", "Name", schedule.VaccineId);
-        ViewBag.VaccinationDates = vaccinationDates;
-
-        if (vaccinationDates == null || vaccinationDates.Count == 0)
-        {
-            ViewBag.ErrorMessage = "Schedule needs at least 1 date";
-            return View("upsert", schedule);
-        }
 
         ModelState.Remove("vaccinationDates");
 
@@ -71,20 +62,7 @@ public class ScheduleController : Controller
         if (id == 0)
         {
             _unitOfWork.VaccinationSchedule.Insert(schedule);
-            _unitOfWork.Save();
-
-            foreach (var date in vaccinationDates)
-            {
-                var newVaccinationDate = new VaccinationDate
-                {
-                    VaccinationScheduleId = schedule.Id,
-                    Date = date
-                };
-                _unitOfWork.VaccinationDate.Insert(newVaccinationDate);
-            }
             SuccessMessage = "New schedule added";
-            _unitOfWork.Save();
-            return RedirectToAction(nameof(Index));
         }
         else
         {
@@ -129,7 +107,7 @@ public class ScheduleController : Controller
         //
         // return Json(new { data = scheduleDtos });
 
-        var scheduleList = _unitOfWork.VaccinationSchedule.GetAll(includeProperties: "Vaccine,VaccinationDates");
+        var scheduleList = _unitOfWork.VaccinationSchedule.GetAll(includeProperties: "Vaccine");
         var scheduleDtos = _mapper.Map<List<VaccinationScheduleDto>>(scheduleList);
         return Json(new { data = scheduleDtos });
 

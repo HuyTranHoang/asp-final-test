@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
@@ -12,12 +13,15 @@ public class VaccinationSchedule
     [Required]
     public string Name { get; set; } = "";
 
+    [Required]
+    [DisplayName("Vaccination Dates")]
+    public string VaccinationDates { get; set; } = "";
+
+    [DisplayName("Vaccine")]
     public int VaccineId { get; set; }
     [ValidateNever]
     public Vaccine Vaccine { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-    [ValidateNever]
-    public ICollection<VaccinationDate> VaccinationDates { get; set; }
 }
